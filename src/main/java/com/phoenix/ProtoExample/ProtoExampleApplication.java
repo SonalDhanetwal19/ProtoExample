@@ -20,6 +20,7 @@ public class ProtoExampleApplication {
 									.setName(name)
 									.setEmail(email)
 									.build();
+
 		System.out.println(firstuser);
 	}
 	@Bean
