@@ -1,0 +1,64 @@
+syntax = "proto2";
+package protobuf;
+
+option java_package= "com.chargingtime.protobuf.proto";
+option java_outer_classname= "ChargingTimeProto";
+
+message ChargingTime
+{
+	required string batteryCapacity = 1;
+	required string maximumInputChargingPowerAC = 2;
+	required string maximumInputChargingPowerDC = 3;
+	required string chargingCurveVersionNumber = 4;
+	required string maxCumulatedPowerOfFastCharging = 5;
+	required string electricRange=6;
+    repeated ChargingCurveData chargingCurveData= 7;
+
+}
+
+    message ChargingCurveData
+    {
+        repeated Temperature temprature = 1;
+    }
+
+    message Temperature
+    {
+        required string tempratureValue = 1;
+        repeated Mode2AC mode2AC = 2;
+        repeated Mode3AC mode3AC = 3;
+        repeated Mode4AC mode4AC = 4;
+    }
+
+    message Mode2AC
+    {
+        required string ModeValue = 1;
+        required string unit = 2;
+        required string fromSoc = 3;
+        repeated Durations duration = 4;
+    }
+
+    message Mode3AC
+    {
+        required string ModeValue = 1;
+        required string unit = 2;
+        required string fromSoc = 3;
+        repeated Durations duration = 4;
+    }
+
+    message Mode4AC
+    {
+        required string ModeValue = 1;
+        required string unit = 2;
+        required string fromSoc = 3;
+        repeated Durations duration = 4;
+    }
+
+    message Durations
+    {
+        required string toSoc = 1;
+        required string duration = 2;
+        required string durationWhenCold = 3;
+    }
+
+
+
