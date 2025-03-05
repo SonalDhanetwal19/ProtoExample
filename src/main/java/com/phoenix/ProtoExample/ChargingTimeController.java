@@ -3,9 +3,7 @@ package com.phoenix.ProtoExample;
 import com.chargingtime.protobuf.proto.ChargingTimeProto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
@@ -18,55 +16,60 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 @RestController
-@RequestMapping("/chargingTime/v1")
+@RequestMapping("/chargingTime")
 public class ChargingTimeController {
 
-    @GetMapping(value="/generateProto", produces = "application/x-protobuf")
-    public ResponseEntity<byte[]> getChargingTimeData() {
+    @GetMapping(value="/v1/generateProto/{imei}", produces = "application/x-protobuf")
+    public ResponseEntity<byte[]> getChargingTimeData(@RequestHeader HttpHeaders headers) {
 
+        HttpHeaders recHeaders = new HttpHeaders();
+        recHeaders = headers;
+        String versionNumber = recHeaders.get("versionNumber").toString();
+
+        System.out.println("version Number : "+versionNumber);
         ChargingTimeProto.Durations durations1 = ChargingTimeProto.Durations.newBuilder()
-                .setToSoc("80%")
-                .setDuration("50")
-                .setDurationWhenCold("55")
+                .setToSoc(80)
+                .setDuration(50)
+                .setDurationWhenCold(55)
                 .build();
         ChargingTimeProto.Durations durations2 = ChargingTimeProto.Durations.newBuilder()
-                .setToSoc("70%")
-                .setDuration("40")
-                .setDurationWhenCold("45")
+                .setToSoc(70)
+                .setDuration(40)
+                .setDurationWhenCold(45)
                 .build();
 
         ChargingTimeProto.Mode2AC mode2AC1 = ChargingTimeProto.Mode2AC.newBuilder()
                 .setModeValue("1.8kW")
                 .setUnit("h")
-                .setFromSoc("10%")
+                .setFromSoc(10)
                 .addDuration(durations1)
                 .addDuration(durations2)
                 .build();
         ChargingTimeProto.Mode2AC mode2AC2 = ChargingTimeProto.Mode2AC.newBuilder()
                 .setModeValue("2.3kW")
                 .setUnit("h")
-                .setFromSoc("10%")
+                .setFromSoc(10)
                 .addDuration(durations1)
                 .addDuration(durations2)
                 .build();
         ChargingTimeProto.Mode2AC mode2AC3 = ChargingTimeProto.Mode2AC.newBuilder()
                 .setModeValue("3.5kW")
                 .setUnit("h")
-                .setFromSoc("10%")
+                .setFromSoc(10)
                 .addDuration(durations1)
                 .addDuration(durations2)
                 .build();
         ChargingTimeProto.Mode3AC mode3AC1 = ChargingTimeProto.Mode3AC.newBuilder()
                 .setModeValue("7kW")
                 .setUnit("h")
-                .setFromSoc("10%")
+                .setFromSoc(10)
                 .addDuration(durations1)
                 .addDuration(durations2)
                 .build();
         ChargingTimeProto.Mode3AC mode3AC2 = ChargingTimeProto.Mode3AC.newBuilder()
                 .setModeValue("11kW")
                 .setUnit("h")
-                .setFromSoc("10%")
+                .setFromSoc(10)
                 .addDuration(durations1)
                 .addDuration(durations2)
                 .build();
@@ -74,27 +77,27 @@ public class ChargingTimeController {
         ChargingTimeProto.Mode4AC mode4AC1 = ChargingTimeProto.Mode4AC.newBuilder()
                 .setModeValue("50kW")
                 .setUnit("min")
-                .setFromSoc("10%")
+                .setFromSoc(10)
                 .addDuration(durations1)
                 .addDuration(durations2)
                 .build();
         ChargingTimeProto.Mode4AC mode4AC2 = ChargingTimeProto.Mode4AC.newBuilder()
                 .setModeValue("100kW")
                 .setUnit("min")
-                .setFromSoc("10%")
+                .setFromSoc(10)
                 .addDuration(durations1)
                 .addDuration(durations2)
                 .build();
         ChargingTimeProto.Mode4AC mode4AC3 = ChargingTimeProto.Mode4AC.newBuilder()
                 .setModeValue("150kW")
                 .setUnit("min")
-                .setFromSoc("10%")
+                .setFromSoc(10)
                 .addDuration(durations1)
                 .addDuration(durations2)
                 .build();
 
         ChargingTimeProto.Temperature temprature = ChargingTimeProto.Temperature.newBuilder()
-                .setTempratureValue("-10")
+                .setTempratureValue(-10)
                 .addMode2AC(mode2AC1)
                 .addMode2AC(mode2AC2)
                 .addMode2AC(mode2AC3)
@@ -172,5 +175,12 @@ public class ChargingTimeController {
 
         return "Success";
     }
+
+//    @PostMapping(value="/v1/uploadChargingCurveData")
+//    public ResponseEntity uploadChargingCurveData()
+//    {
+//
+//
+//    }
 
 }

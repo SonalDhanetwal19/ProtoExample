@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 package protobuf;
 
 option java_package= "com.chargingtime.protobuf.proto";
@@ -6,12 +6,12 @@ option java_outer_classname= "ChargingTimeProto";
 
 message ChargingTime
 {
-	required string batteryCapacity = 1;
-	required string maximumInputChargingPowerAC = 2;
-	required string maximumInputChargingPowerDC = 3;
-	required string chargingCurveVersionNumber = 4;
-	required string maxCumulatedPowerOfFastCharging = 5;
-	required string electricRange=6;
+	string batteryCapacity = 1;
+	string maximumInputChargingPowerAC = 2;
+	string maximumInputChargingPowerDC = 3;
+	string chargingCurveVersionNumber = 4;
+	string maxCumulatedPowerOfFastCharging = 5;
+	string electricRange=6;
     repeated ChargingCurveData chargingCurveData= 7;
 
 }
@@ -23,7 +23,8 @@ message ChargingTime
 
     message Temperature
     {
-        required string tempratureValue = 1;
+        // Temperature of the battery (in Celsius degrees)
+        sint32 tempratureValue = 1;
         repeated Mode2AC mode2AC = 2;
         repeated Mode3AC mode3AC = 3;
         repeated Mode4AC mode4AC = 4;
@@ -31,33 +32,38 @@ message ChargingTime
 
     message Mode2AC
     {
-        required string ModeValue = 1;
-        required string unit = 2;
-        required string fromSoc = 3;
+        string ModeValue = 1;
+        string unit = 2;
+        uint32 fromSoc = 3;
         repeated Durations duration = 4;
     }
 
     message Mode3AC
     {
-        required string ModeValue = 1;
-        required string unit = 2;
-        required string fromSoc = 3;
+        string ModeValue = 1;
+        string unit = 2;
+        uint32 fromSoc = 3;
         repeated Durations duration = 4;
     }
 
     message Mode4AC
     {
-        required string ModeValue = 1;
-        required string unit = 2;
-        required string fromSoc = 3;
+        // Recharge power associated to the current curve (in Watt)
+        string ModeValue = 1;
+
+        string unit = 2;
+        uint32 fromSoc = 3;
         repeated Durations duration = 4;
     }
 
     message Durations
     {
-        required string toSoc = 1;
-        required string duration = 2;
-        required string durationWhenCold = 3;
+        // Target SoC (in percent)
+        uint32 toSoc = 1;
+        // Duration to recharge to the target SoC when the battery is pre-warmed (in minutes)
+        uint32 duration = 2;
+        // Duration to recharge to the target SoC when battery is “cold” (no pre-warming) (in minutes)
+        uint32 durationWhenCold = 3;
     }
 
 
