@@ -1,7 +1,10 @@
 package com.phoenix.ProtoExample;
 
+import com.chargingtime.errorcodedetails.proto.ErrorCodeDetails;
 import com.chargingtime.protobuf.proto.ChargingTimeProto;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +22,8 @@ import java.util.Scanner;
 @RequestMapping("/chargingTime")
 public class ChargingTimeController {
 
-    @GetMapping(value="/v1/generateProto/{imei}", produces = "application/x-protobuf")
-    public ResponseEntity<byte[]> getChargingTimeData(@RequestHeader HttpHeaders headers) {
+    @GetMapping(value="/v1/generateProto/{imei}", produces = {MediaType.APPLICATION_PROTOBUF_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<byte[]> getChargingTimeData(@RequestHeader HttpHeaders headers) throws BadRequestException {
 
         HttpHeaders recHeaders = new HttpHeaders();
         recHeaders = headers;
@@ -121,7 +124,13 @@ public class ChargingTimeController {
                 .addChargingCurveData(chargingCurveData)
                 .build();
 
-        return ResponseEntity.ok()
+        //throw new InternalException("500 internal server error", ErrorCodeDetails.ErrorCode.INTERNAL_SERVER_ERROR);
+        //use for custom exception
+        //throw new BadRequestExcp("bad req custom exc",ErrorCodeDetails.ErrorCode.BAD_REQUEST_EXCEPTION);
+        //use for standard exceptions
+        //throw new BadRequestException("Bad request exception -> exception class");
+
+                return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-protobuf")
                 .body(chargingTime.toByteArray());
     }
